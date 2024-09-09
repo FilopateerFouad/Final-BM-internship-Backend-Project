@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Constraint(validatedBy = ConfirmPassword.class)
-@Target({ElementType.FIELD, ElementType.TYPE })
+@Target({ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordConfirmation {
     String message() default "Passwords do not match";

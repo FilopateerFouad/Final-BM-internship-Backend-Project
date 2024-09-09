@@ -30,6 +30,11 @@ public class TransferServiceExceptionHandler {
                 request.getDescription(false), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(WrongPasswordException.class)
+    public ResponseEntity<Object> wrongPasswordexceptionHandling(WrongPasswordException exception, WebRequest request) {
+        return new ResponseEntity<>(new ErrorDetails(LocalDateTime.now(), exception.getMessage(),
+                request.getDescription(false), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> methodArgumentNotValidExceptionHandling(MethodArgumentNotValidException exception) {
 

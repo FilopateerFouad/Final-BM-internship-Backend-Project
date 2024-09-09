@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Builder.Default
     private Set<Account> accounts = new HashSet<>();
+    @OneToOne(mappedBy = "customer")
+    private Token token;
  public RegisterCustomerResponse toResponse() {
         return RegisterCustomerResponse.builder()
                 .id(this.id)

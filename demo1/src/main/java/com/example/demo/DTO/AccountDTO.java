@@ -2,12 +2,14 @@ package com.example.demo.DTO;
 
 import com.example.demo.DTO.enums.AccountCurrency;
 import com.example.demo.DTO.enums.AccountType;
+import com.example.demo.entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -32,6 +34,8 @@ public class AccountDTO {
     private Boolean active;
 
     private LocalDateTime createdAt;
+
+    private  Set<TransactionDTO> transactions;
 
     private LocalDateTime updatedAt;
 }

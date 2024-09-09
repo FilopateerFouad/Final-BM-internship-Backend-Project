@@ -12,6 +12,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -42,7 +45,6 @@ public class Account {
     private String accountName;
 
     private String accountDescription;
-
     @Builder.Default
     @Column(nullable = false)
     private Boolean active = true;
@@ -55,6 +57,9 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
+    @OneToMany(mappedBy = "recipient", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<Transaction> transactions = new HashSet<>();
 
     public AccountDTO toDTO() {
         return AccountDTO.builder()
@@ -68,7 +73,9 @@ public class Account {
                 .active(this.active)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
+                .transactions(this.transactions.stream().map(Transaction::toDTO).collect(Collectors.toSet()))
                 .build();
     }
+
 
 }
