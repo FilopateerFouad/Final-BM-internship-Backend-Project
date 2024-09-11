@@ -2,7 +2,7 @@ package com.example.demo.controller;
 import com.example.demo.DTO.CustomerDTO;
 import com.example.demo.DTO.UpdateCustomerDTO;
 import com.example.demo.DTO.UpdatePasswordDTO;
-import com.example.demo.exception.CustomerAlreadyExistException;
+import com.example.demo.exception.ResourceAlreadyExistException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.WrongPasswordException;
 import com.example.demo.exception.response.ErrorDetails;
@@ -35,7 +35,7 @@ public class CustomerController {
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = CustomerDTO.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
     @PutMapping("/data/{customerId}")
-    CustomerDTO updateCustomerData(@PathVariable Long customerId,@RequestBody UpdateCustomerDTO customerDTO)throws CustomerAlreadyExistException, ResourceNotFoundException{
+    CustomerDTO updateCustomerData(@PathVariable Long customerId,@RequestBody UpdateCustomerDTO customerDTO)throws ResourceAlreadyExistException, ResourceNotFoundException{
         return this.customerService.updateCustomerData(customerId, customerDTO);
     }
     @Operation(summary = "Change Customer Password")

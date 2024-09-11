@@ -16,4 +16,5 @@ public class LoginResponse {
     private String tokenType;
     private String message;
     private HttpStatus status;
+    private AccountDTO mainAccount;
 }

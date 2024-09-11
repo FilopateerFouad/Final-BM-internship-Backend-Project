@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class RegisterCustomerResponse {
-    private Long id;
     private String name;
     private String email;
     private LocalDateTime createdAt;

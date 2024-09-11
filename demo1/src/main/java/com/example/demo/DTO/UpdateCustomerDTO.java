@@ -20,7 +20,7 @@ public class UpdateCustomerDTO {
     @NotBlank
     private String Country;
     @NotNull
-    private LocalDate DateofBirth;
+    private LocalDate DateOfBirth;
     @NotNull
     private LocalDateTime updateDate;
 }

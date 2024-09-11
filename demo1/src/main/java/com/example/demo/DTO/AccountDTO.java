@@ -2,12 +2,12 @@ package com.example.demo.DTO;
 
 import com.example.demo.DTO.enums.AccountCurrency;
 import com.example.demo.DTO.enums.AccountType;
-import com.example.demo.entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -17,13 +17,11 @@ import java.util.Set;
 @Builder
 public class AccountDTO {
 
-    private Long id;
-
     private String accountNumber;
 
     private AccountType accountType;
 
-    private Double balance;
+    private BigDecimal balance;
 
     private AccountCurrency currency;
 

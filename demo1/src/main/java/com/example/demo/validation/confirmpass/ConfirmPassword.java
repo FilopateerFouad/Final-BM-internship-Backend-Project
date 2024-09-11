@@ -2,7 +2,6 @@ package com.example.demo.validation.confirmpass;
 import com.example.demo.DTO.RegisterCustomerRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import java.lang.String;
 
 public class ConfirmPassword implements ConstraintValidator<PasswordConfirmation, RegisterCustomerRequest> {
     @Override

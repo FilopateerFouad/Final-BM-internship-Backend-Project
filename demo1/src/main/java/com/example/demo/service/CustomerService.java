@@ -3,7 +3,7 @@ import com.example.demo.DTO.CustomerDTO;
 import com.example.demo.DTO.UpdateCustomerDTO;
 import com.example.demo.DTO.UpdatePasswordDTO;
 import com.example.demo.entity.Customer;
-import com.example.demo.exception.CustomerAlreadyExistException;
+import com.example.demo.exception.ResourceAlreadyExistException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.WrongPasswordException;
 import com.example.demo.repository.CustomerRepository;
@@ -23,19 +23,20 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public CustomerDTO updateCustomerData(Long customerId,UpdateCustomerDTO customerDTO) throws ResourceNotFoundException, CustomerAlreadyExistException {
+    public CustomerDTO updateCustomerData(Long customerId,UpdateCustomerDTO customerDTO) throws ResourceNotFoundException, ResourceAlreadyExistException {
         Customer customer = this.customerRepository.
                 findById(customerId).
                 orElseThrow(() -> new ResourceNotFoundException
                         ("Customer with id " + customerId + " notfound"));
         if (Boolean.TRUE.equals(this.customerRepository.existsByEmail(customerDTO.getEmail()))) {
-            throw new CustomerAlreadyExistException("Customer with email " + customerDTO.getEmail() + " already exists");
+            throw new ResourceAlreadyExistException("Customer with email " + customerDTO.getEmail() + " already exists");
         }
         customer.setName(customerDTO.getName());
         customer.setEmail(customerDTO.getEmail());
         customer.setCountry(customerDTO.getCountry());
         customer.setUpdatedAt(customerDTO.getUpdateDate());
-        customer.setDateOfBirth(customerDTO.getDateofBirth());
+        customer.setDateOfBirth(customerDTO.getDateOfBirth());
+        this.customerRepository.save(customer);
         return customer.toDTO();
     }
 
@@ -49,6 +50,7 @@ public class CustomerService implements ICustomerService {
             customer.setPassword(passwordEncoder.encode( customerPasswordDTO.getNewPassword()));
         else
             throw new WrongPasswordException("Wrong password");
+        this.customerRepository.save(customer);
         return customer.toDTO();
 
     }

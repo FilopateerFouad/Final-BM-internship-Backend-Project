@@ -2,6 +2,7 @@ package com.example.demo.controller;
 import com.example.demo.DTO.AccountDTO;
 import com.example.demo.DTO.CreateAccountDTO;
 import com.example.demo.DTO.TransactionDTO;
+import com.example.demo.DTO.TransferRequest;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.response.ErrorDetails;
 import com.example.demo.service.IAccountService;
@@ -12,9 +13,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 @RestController
 @RequestMapping("api/v1/account")
@@ -33,22 +37,34 @@ public class AccountController {
     @Operation(summary = "Get Account by Id")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = AccountDTO.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
-    @GetMapping("/{accountId}")
-    public AccountDTO getAccount(@PathVariable Long accountId) throws ResourceNotFoundException {
-        return this.accountService.getAccountById(accountId);
+    @GetMapping("/getaccount/{accountNumber}")
+    public AccountDTO getAccount(@PathVariable String accountNumber) throws ResourceNotFoundException {
+        return this.accountService.getAccountById(accountNumber);
     }
     @Operation(summary = "Get Transaction set for the account")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = TransactionDTO.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
-    @GetMapping("/transactions/{accountId}")
-    public Set<TransactionDTO> getAllTransactions(@PathVariable Long accountId)throws ResourceNotFoundException{
-        return this.accountService.getAllTransactions(accountId);
+    @GetMapping("/transactions/{accountNumber}")
+    public List<TransactionDTO> getAllTransactions(@PathVariable String accountNumber)throws ResourceNotFoundException{
+        return this.accountService.getAllTransactions(accountNumber);
     }
     @Operation(summary = "Get Balance for the account")
     @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = AccountDTO.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorDetails.class), mediaType = "application/json")})
-    @GetMapping("/balance/{accountId}")
-    public Double getBalanaceById(@PathVariable Long accountId) throws ResourceNotFoundException{
-        return this.accountService.getBalanaceById(accountId);
+    @GetMapping("/balance/{accountNumber}")
+    public BigDecimal getBalanaceById(@PathVariable String accountNumber) throws ResourceNotFoundException{
+        return this.accountService.getBalanaceById(accountNumber);
+    }
+    @Operation(summary = "Transfer funds",
+            description = "Transfers funds from one account to another",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Transfer successful"),
+                    @ApiResponse(responseCode = "400", description = "Invalid transfer request"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            })
+    @PostMapping("/transfer")
+    public ResponseEntity<String> transferMoney(@RequestBody TransferRequest transferRequestDTO) throws ResourceNotFoundException{
+        accountService.transferMoney(transferRequestDTO.getFromAccount(), transferRequestDTO.getToAccount(), transferRequestDTO.getAmount());
+        return ResponseEntity.ok("Transfer successful");
     }
 }

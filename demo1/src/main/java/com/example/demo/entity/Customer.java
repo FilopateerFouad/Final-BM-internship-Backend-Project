@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,9 +43,10 @@ public class Customer {
     private Set<Account> accounts = new HashSet<>();
     @OneToOne(mappedBy = "customer")
     private Token token;
+    @OneToOne(mappedBy ="mainCustomer",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Account mainAccount;
  public RegisterCustomerResponse toResponse() {
         return RegisterCustomerResponse.builder()
-                .id(this.id)
                 .name(this.name)
                 .email(this.email)
                 .Country(this.Country)

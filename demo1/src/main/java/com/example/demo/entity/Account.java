@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.DTO.AccountDTO;
+import com.example.demo.DTO.CustomerDTO;
 import com.example.demo.DTO.enums.AccountCurrency;
 import com.example.demo.DTO.enums.AccountType;
 import jakarta.persistence.*;
@@ -10,9 +11,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.UniqueElements;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,7 +32,6 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false, unique = true)
     private String accountNumber;
 
@@ -36,7 +40,7 @@ public class Account {
     private AccountType accountType;
 
     @Column(nullable = false)
-    private Double balance;
+    private BigDecimal balance;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -54,16 +58,18 @@ public class Account {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    private Customer mainCustomer;
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
-    @OneToMany(mappedBy = "recipient", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Builder.Default
-    private Set<Transaction> transactions = new HashSet<>();
-
+    private List<Transaction> transactions = new ArrayList<>();
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<Favourite> favourites = new HashSet<>();
     public AccountDTO toDTO() {
         return AccountDTO.builder()
-                .id(this.id)
                 .accountNumber(this.accountNumber)
                 .accountType(this.accountType)
                 .balance(this.balance)

@@ -4,6 +4,8 @@ import com.example.demo.DTO.enums.AccountCurrency;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,10 +18,15 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.EAGER)
-    private Account sender;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Account recipient;
+    @Column(nullable = false)
+    private String  senderAccount;
+    @Column(nullable = false)
+    private String  senderName;
+    @Column(nullable = false)
+    private String  recipientAccount;
+    @Column(nullable = false)
+    private String  recipientName;
+    @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
     @Column(nullable = false)
@@ -29,12 +36,15 @@ public class Transaction {
     @Column(nullable = false)
     private Boolean success=false;
     @Column(nullable = false)
-    private Double amount;
+    private BigDecimal amount;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Account account;
     public TransactionDTO toDTO() {
         return TransactionDTO.builder()
-                .id(this.id)
-                .sender(this.sender.toDTO())
-                .recipient(this.recipient.toDTO())
+                .senderAccount(this.senderAccount)
+                .recipientAccount(this.recipientAccount)
+                .recipientName(this.recipientName)
+                .senderName(this.senderName)
                 .success(this.success)
                 .amount(this.amount)
                 .currency(this.currency)

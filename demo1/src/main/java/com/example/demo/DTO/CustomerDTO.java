@@ -3,7 +3,6 @@ package com.example.demo.DTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -24,4 +23,5 @@ public class CustomerDTO {
     private LocalDateTime updatedAt;
 
     private Set<AccountDTO> accounts;
+    private AccountDTO mainAccount;
 }

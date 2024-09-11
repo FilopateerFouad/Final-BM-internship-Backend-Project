@@ -1,0 +1,5 @@
+# Created at ٢٠٢٤-٠٩-١٢T٠٠:٣٢:١٩.٥٠٧
+Boot Manifest-JAR contains absolute paths in classpath 'D:\filo folder\Final Speedo Transfer\demo1\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

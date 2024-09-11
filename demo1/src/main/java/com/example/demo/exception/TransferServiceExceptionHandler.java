@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class TransferServiceExceptionHandler {
 
-    @ExceptionHandler(CustomerAlreadyExistException.class)
-    public ResponseEntity<Object> customerAlreadyExistExceptionHandling(CustomerAlreadyExistException exception, WebRequest request) {
+    @ExceptionHandler(ResourceAlreadyExistException.class)
+    public ResponseEntity<Object> customerAlreadyExistExceptionHandling(ResourceAlreadyExistException exception, WebRequest request) {
         return new ResponseEntity<>(new ErrorDetails(LocalDateTime.now(), exception.getMessage(),
                 request.getDescription(false), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }

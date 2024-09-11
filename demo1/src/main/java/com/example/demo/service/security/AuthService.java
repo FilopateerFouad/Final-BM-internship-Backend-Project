@@ -8,7 +8,8 @@ import com.example.demo.DTO.enums.AccountType;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Customer;
 import com.example.demo.entity.Token;
-import com.example.demo.exception.CustomerAlreadyExistException;
+import com.example.demo.exception.ResourceAlreadyExistException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.TokenRepository;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -31,9 +34,9 @@ public class AuthService implements IAuthService {
     private final TokenRepository tokenRepository;
     private final JwtUtils jwtUtils;
 
-    public RegisterCustomerResponse register(RegisterCustomerRequest body) throws CustomerAlreadyExistException {
+    public RegisterCustomerResponse register(RegisterCustomerRequest body) throws ResourceAlreadyExistException {
         if (Boolean.TRUE.equals(this.customerRepository.existsByEmail(body.getEmail()))) {
-            throw new CustomerAlreadyExistException("Customer with email " + body.getEmail() + " already exists");
+            throw new ResourceAlreadyExistException("Customer with email " + body.getEmail() + " already exists");
         }
         Customer customer = Customer.builder()
                 .email(body.getEmail())
@@ -44,31 +47,35 @@ public class AuthService implements IAuthService {
                 .build();
 
         Account account = Account.builder()
-                .balance(0.0)
+                .balance(BigDecimal.valueOf(1000.0))
                 .accountType(AccountType.SAVINGS)
+                .accountName(body.getName())
                 .accountDescription("Saving Account")
                 .currency(AccountCurrency.EGP)
                 .accountNumber(new SecureRandom().nextInt(10000000) + "")
                 .customer(customer)
+                .mainCustomer(customer)
                 .build();
         customer.getAccounts().add(account);
-
+        customer.setMainAccount(account);
         Customer savedCustomer = customerRepository.save(customer);
-
         return savedCustomer.toResponse();
     }
 
     @Override
-    public LoginResponse Login(LoginRequest LoginRequest) throws CustomerAlreadyExistException {
+    public LoginResponse Login(LoginRequest LoginRequest) throws ResourceNotFoundException {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(LoginRequest.getEmail(), LoginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
+        Customer customer = this.customerRepository.findUserByEmail(LoginRequest.getEmail()).
+                orElseThrow(()->new ResourceNotFoundException("Customer with email " + LoginRequest.getEmail() + " notfound"));
         return LoginResponse.builder()
                 .token(jwt)
                 .message("Login Successful")
                 .status(HttpStatus.ACCEPTED)
                 .tokenType("Bearer")
+                .mainAccount(customer.getMainAccount().toDTO())
                 .build();
     }
     public void logout(HttpServletRequest request) {
@@ -85,16 +92,4 @@ public class AuthService implements IAuthService {
         }
         SecurityContextHolder.clearContext();
     }
-
-    private void saveUserToken(String username, String jwtToken) {
-        Customer customer = customerRepository.findUserByEmail(username).orElseThrow();
-        Token token = Token.builder()
-                .customer(customer)
-                .token(jwtToken)
-                .expired(false)
-                .revoked(false)
-                .build();
-        tokenRepository.save(token);
     }
-
-}
