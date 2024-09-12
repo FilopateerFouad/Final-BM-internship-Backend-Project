@@ -22,10 +22,12 @@ com\example\demo\entity\Customer$CustomerBuilder.class
 com\example\demo\validation\countryValidator\CountryNameValidator.class
 com\example\demo\DTO\CustomerDTO$CustomerDTOBuilder.class
 com\example\demo\DTO\RegisterCustomerResponse$RegisterCustomerResponseBuilder.class
+com\example\demo\config\OpenApiConfig.class
 com\example\demo\DTO\LoginResponse.class
 com\example\demo\DTO\TransferRequest$TransferRequestBuilder.class
 com\example\demo\entity\Token$TokenBuilder.class
 com\example\demo\validation\confirmpass\ConfirmPassword.class
+com\example\demo\config\WebSecurityConfig.class
 com\example\demo\service\LogoutService.class
 com\example\demo\DTO\LoginResponse$LoginResponseBuilder.class
 com\example\demo\repository\TransactionRepository.class
@@ -34,6 +36,7 @@ com\example\demo\exception\response\ViolationErrors.class
 com\example\demo\entity\Transaction$TransactionBuilder.class
 com\example\demo\Demo1Application.class
 com\example\demo\exception\response\ValidationFailedResponse.class
+com\example\demo\service\security\AuthEntryPointJwt.class
 com\example\demo\exception\WrongPasswordException.class
 com\example\demo\validation\countryValidator\ValidCountryName.class
 com\example\demo\DTO\RegisterCustomerRequest$RegisterCustomerRequestBuilder.class
@@ -58,6 +61,7 @@ com\example\demo\validation\confirmpass\PasswordConfirmation.class
 com\example\demo\repository\TokenRepository.class
 com\example\demo\service\security\CustomerDetails.class
 com\example\demo\exception\response\ViolationErrors$ViolationErrorsBuilder.class
+com\example\demo\service\security\CustomerDetailsService.class
 com\example\demo\entity\Token.class
 com\example\demo\DTO\FavouriteDTO.class
 com\example\demo\DTO\RegisterCustomerResponse.class

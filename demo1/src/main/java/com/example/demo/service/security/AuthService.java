@@ -76,6 +76,7 @@ public class AuthService implements IAuthService {
                 .status(HttpStatus.ACCEPTED)
                 .tokenType("Bearer")
                 .mainAccount(customer.getMainAccount().toDTO())
+                .customerId(customer.getId())
                 .build();
     }
     public void logout(HttpServletRequest request) {

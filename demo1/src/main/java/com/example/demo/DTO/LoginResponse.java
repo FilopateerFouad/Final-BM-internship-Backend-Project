@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 @Builder
 
 public class LoginResponse {
+    private Long customerId;
     private String token;
     private String tokenType;
     private String message;
