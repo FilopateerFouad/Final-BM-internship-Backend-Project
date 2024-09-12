@@ -1,3 +1,4 @@
+# Money Transfer App
 This is a Money Transfer application developed using Java Spring Boot. The application handles user registration, login, logout, and JWT authentication. Each customer can create an account, manage their account details, transfer money between accounts, and view transaction history.
 
 ## Features
