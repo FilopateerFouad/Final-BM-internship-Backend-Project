@@ -58,7 +58,9 @@ mvn spring-boot:run
 * Access Swagger UI for API Documentation:
 
 Open your browser and navigate to http://localhost:8080/swagger-ui.html
-
+## the host 
+we deploy on AWS so you can try any api endpoint using this host 
+http://13.60.187.217:8080
 ## API Endpoints
 ### Authentication
 * Register a new user:
@@ -176,6 +178,7 @@ Authorization: Bearer <jwt_token>
 * JWT
 * Swagger
 * Postman
+* AWS
 ## Contribution
 ### Filopateer:
 1-Account Creation
